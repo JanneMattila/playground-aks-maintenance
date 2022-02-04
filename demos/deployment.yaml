@@ -1,12 +1,12 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: webapp-network-tester
+  name: webapp
   namespace: demos
   annotations:
     kubernetes.io/change-cause: Annotation from deployment yaml
 spec:
-  replicas: 2
+  replicas: 10
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -14,15 +14,16 @@ spec:
       maxUnavailable: 1
   selector:
     matchLabels:
-      app: webapp-network-tester
+      app: webapp
   template:
     metadata:
       labels:
-        app: webapp-network-tester
+        app: webapp
     spec:
       containers:
-        - image: jannemattila/webapp-network-tester:1.0.42
-          name: webapp-network-tester
+        # https://hub.docker.com/r/jannemattila/k8s-probe-demo/tags
+        - image: jannemattila/k8s-probe-demo:1.0.11
+          name: webapp
           resources:
             requests:
               cpu: 100m
@@ -34,3 +35,19 @@ spec:
             - containerPort: 80
               name: http
               protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /api/HealthCheck/Liveness
+              port: 80
+            initialDelaySeconds: 5
+            timeoutSeconds: 1
+            periodSeconds: 10
+            failureThreshold: 1
+          readinessProbe:
+            httpGet:
+              path: /api/HealthCheck/Readiness
+              port: 80
+            initialDelaySeconds: 10
+            timeoutSeconds: 1
+            periodSeconds: 10
+            failureThreshold: 1
