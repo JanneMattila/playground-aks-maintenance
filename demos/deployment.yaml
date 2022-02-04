@@ -6,12 +6,12 @@ metadata:
   annotations:
     kubernetes.io/change-cause: Annotation from deployment yaml
 spec:
-  replicas: 10
+  replicas: 1
   strategy:
     type: RollingUpdate
     rollingUpdate:
-      maxSurge: 50%
-      maxUnavailable: 1
+      maxSurge: 25%
+      maxUnavailable: 0
   selector:
     matchLabels:
       app: webapp

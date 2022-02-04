@@ -62,10 +62,6 @@ echo $identityobjectid
 
 az aks get-versions -l $location -o table
 
-# Note: for public cluster you need to authorize your ip to use api
-myip=$(curl --no-progress-meter https://api.ipify.org)
-echo $myip
-
 # Note about private clusters:
 # https://docs.microsoft.com/en-us/azure/aks/private-clusters
 
@@ -89,7 +85,6 @@ az aks create -g $resourceGroupName -n $aksName \
  --load-balancer-sku standard \
  --vnet-subnet-id $subnetaksid \
  --assign-identity $identityid \
- --api-server-authorized-ip-ranges $myip \
  -o table
 
 # Create secondary node pool and use "secure-subnet" for pods in it
@@ -180,6 +175,11 @@ az aks nodepool get-upgrades --nodepool-name nodepool1 -g $resourceGroupName --c
 az aks nodepool update -n nodepool1 -g $resourceGroupName --cluster-name $aksName --max-surge 1
 
 time az aks upgrade -g $resourceGroupName -n $aksName --kubernetes-version 1.19.13 --yes
+
+time az aks upgrade -g $resourceGroupName -n $aksName --kubernetes-version 1.20.9 --control-plane-only --yes
+time az aks nodepool upgrade --name nodepool1 -g $resourceGroupName --cluster-name $aksName --kubernetes-version 1.20.9
+
+time az aks upgrade -g $resourceGroupName -n $aksName --kubernetes-version 1.19.13 --node-image-only --yes
 kubectl get events
 
 # Wipe out the resources
