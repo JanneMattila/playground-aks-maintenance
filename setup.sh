@@ -146,5 +146,29 @@ echo $svc_ip
 curl $svc_ip
 # -> <html><body>Hello there!</body></html>
 
+# Test deployments
+kubectl apply -f demos/deployment.yaml
+
+kubectl rollout history deployment/webapp-network-tester -n demos
+kubectl rollout status deployment/webapp-network-tester -n demos -w
+kubectl annotate deployment/webapp-network-tester -n demos kubernetes.io/change-cause="Deployment release #123"
+
+kubectl get deployment -n demos -o wide -w
+
+kubectl rollout undo deployment/webapp-network-tester -n demos
+kubectl rollout undo deployment/webapp-network-tester -n demos --to-revision=2
+
+# Get number of pods per node
+kubectl get pod -n demos --no-headers=true -o custom-columns=NODE:'{.spec.nodeName}' | sort | uniq -c | sort -n
+
+# Test scaling
+kubectl scale deployment/webapp-network-tester -n demos --replicas=3
+
+# Test image updates
+kubectl set image deployment/webapp-network-tester -n demos webapp-network-tester=jannemattila/webapp-network-tester:1.0.40
+
+# Updates
+az aks get-versions -l $location -o table
+
 # Wipe out the resources
 az group delete --name $resourceGroupName -y

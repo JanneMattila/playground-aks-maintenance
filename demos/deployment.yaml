@@ -3,8 +3,15 @@ kind: Deployment
 metadata:
   name: webapp-network-tester
   namespace: demos
+  annotations:
+    kubernetes.io/change-cause: Annotation from deployment yaml
 spec:
   replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 50%
+      maxUnavailable: 1
   selector:
     matchLabels:
       app: webapp-network-tester
@@ -14,16 +21,16 @@ spec:
         app: webapp-network-tester
     spec:
       containers:
-      - image: jannemattila/webapp-network-tester:1.0.40
-        name: webapp-network-tester
-        resources:
-          requests:
-            cpu: 100m
-            memory: 100Mi
-          limits:
-            cpu: 150m
-            memory: 150Mi
-        ports:
-        - containerPort: 80
-          name: http
-          protocol: TCP
+        - image: jannemattila/webapp-network-tester:1.0.42
+          name: webapp-network-tester
+          resources:
+            requests:
+              cpu: 100m
+              memory: 100Mi
+            limits:
+              cpu: 150m
+              memory: 150Mi
+          ports:
+            - containerPort: 80
+              name: http
+              protocol: TCP
