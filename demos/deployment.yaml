@@ -20,6 +20,14 @@ spec:
       labels:
         app: webapp
     spec:
+      # Use these to force to use nodepool2
+      # nodeSelector:
+      #   usage: limitedaccess
+      # tolerations:
+      #   - key: "usage"
+      #     operator: "Equal"
+      #     value: "limitedaccess"
+      #     effect: "NoSchedule"
       containers:
         # https://hub.docker.com/r/jannemattila/k8s-probe-demo/tags
         - image: jannemattila/k8s-probe-demo:1.0.11

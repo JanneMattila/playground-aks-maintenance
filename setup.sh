@@ -87,16 +87,15 @@ az aks create -g $resourceGroupName -n $aksName \
  --assign-identity $identityid \
  -o table
 
-# Create secondary node pool and use "secure-subnet" for pods in it
+# Create secondary node pool
 nodepool2="nodepool2"
 az aks nodepool add -g $resourceGroupName --cluster-name $aksName \
   --name $nodepool2 \
-  --node-count 1 --enable-cluster-autoscaler --min-count 1 --max-count 2 \
+  --node-count 1 --enable-cluster-autoscaler --min-count 1 --max-count 3 \
   --node-osdisk-type "Ephemeral" \
   --node-vm-size "Standard_D8ds_v4" \
   --node-taints "usage=limitedaccess:NoSchedule" \
   --labels usage=limitedaccess \
-  --pod-subnet-id $subnetsecureid \
   --max-pods 150
 
 # az aks nodepool delete -g $resourceGroupName --cluster-name $aksName --name $nodepool2
@@ -174,7 +173,7 @@ az aks nodepool get-upgrades --nodepool-name nodepool1 -g $resourceGroupName --c
 # Note: For production node pools, we recommend a max_surge setting of 33%
 az aks nodepool update -n nodepool1 -g $resourceGroupName --cluster-name $aksName --max-surge 1
 
-time az aks upgrade -g $resourceGroupName -n $aksName --kubernetes-version 1.19.13 --yes
+time az aks upgrade -g $resourceGroupName -n $aksName --kubernetes-version 1.21.2 --yes
 
 time az aks upgrade -g $resourceGroupName -n $aksName --kubernetes-version 1.20.9 --control-plane-only --yes
 time az aks nodepool upgrade --name nodepool1 -g $resourceGroupName --cluster-name $aksName --kubernetes-version 1.20.9
