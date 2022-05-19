@@ -8,6 +8,13 @@ Playground for AKS and maintenance tasks
   - [Deployments](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/)
   - [PodDisruptionBudget ](https://kubernetes.io/docs/tasks/run-application/configure-pdb/)
   - [Think about how your application reacts to disruptions](https://kubernetes.io/docs/tasks/run-application/configure-pdb/#think-about-how-your-application-reacts-to-disruptions)
+  - [Deprecated API Migration Guide](https://kubernetes.io/docs/reference/using-api/deprecation-guide/)
+    - You can use `Cluster Insights` in AKS to see potential problems in this area:
+      1. Open AKS in Azure Portal
+      2. Select `Diagnose and solve problems`
+      3. At very bottom of the page there is link to `Cluster Insights`
+      4. Click `Kubernetes API Deprecations` to see if AKS has found any usage of deprecated APIs
+         - Similarly it has other "deprecated" views to check.
 - AKS
   - Cluster upgrades
     - [AKS Kubernetes Release Calendar](https://docs.microsoft.com/en-us/azure/aks/supported-kubernetes-versions?tabs=azure-cli#aks-kubernetes-release-calendar)
