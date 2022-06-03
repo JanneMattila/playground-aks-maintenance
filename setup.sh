@@ -38,7 +38,7 @@ echo $resourcegroupid
 acrid=$(az acr create -l $location -g $resourceGroupName -n $acrName --sku Basic --query id -o tsv)
 echo $acrid
 
-aadAdmingGroup=$(az ad group list --display-name $aadAdminGroupContains --query [].objectId -o tsv)
+aadAdmingGroup=$(az ad group list --display-name $aadAdminGroupContains --query [].id -o tsv)
 echo $aadAdmingGroup
 
 workspaceid=$(az monitor log-analytics workspace create -g $resourceGroupName -n $workspaceName --query id -o tsv)
